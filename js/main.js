@@ -163,11 +163,15 @@
       ticking = false;
       const marker = window.innerHeight * 0.38;
       let active = sections[0];
+      let topActive = sections[0];
 
       sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= marker) active = section;
+        const top = section.getBoundingClientRect().top;
+        if (top <= marker) active = section;
+        if (top <= 2) topActive = section;
       });
+
+      document.body.classList.toggle('nav-on-red', topActive.dataset.nav === 'red');
 
       const activeId = active.id;
       const label = active.dataset.label || '';
@@ -384,6 +388,135 @@
     });
 
     update();
+  }
+
+  /* ------------------------------------------------------------
+     心动时间线
+     ------------------------------------------------------------ */
+  function initTimeline() {
+    const body = $('.timeline__body');
+    const fill = $('#timelineProgress');
+    const items = $$('.timeline__item');
+    if (!body || !fill) return;
+
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const rect = body.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      const progress = Math.min(1, Math.max(0, (viewport * 0.56 - rect.top) / Math.max(rect.height, 1)));
+      const threshold = viewport * 0.64;
+
+      fill.style.transform = `scaleY(${progress.toFixed(4)})`;
+      items.forEach(item => {
+        item.classList.toggle('is-passed', item.getBoundingClientRect().top <= threshold);
+      });
+    };
+
+    const request = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    update();
+  }
+
+  /* ------------------------------------------------------------
+     没有寄出的短信
+     ------------------------------------------------------------ */
+  function initUnsent() {
+    const notes = $$('.unsent-note');
+    if (!notes.length) return;
+
+    const setOpen = (note, open) => {
+      note.classList.toggle('is-open', open);
+      const button = $('.unsent-note__toggle', note);
+      const action = $('.unsent-note__open span', note);
+      if (button) button.setAttribute('aria-expanded', String(open));
+      if (action) action.textContent = open ? '收起' : '展开';
+    };
+
+    notes.forEach(note => {
+      const button = $('.unsent-note__toggle', note);
+      if (!button) return;
+
+      button.addEventListener('click', () => {
+        const willOpen = !note.classList.contains('is-open');
+        notes.forEach(other => setOpen(other, false));
+        if (willOpen) setOpen(note, true);
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------
+     火漆下的一句话
+     ------------------------------------------------------------ */
+  function initLetterSecret() {
+    const seal = $('#letterSeal');
+    const secret = $('#letterSecret');
+    if (!seal || !secret) return;
+
+    let closeTimer = 0;
+
+    seal.addEventListener('click', () => {
+      const isOpen = seal.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      seal.setAttribute('aria-expanded', String(willOpen));
+      seal.setAttribute('aria-label', willOpen ? '合上火漆下的秘密' : '打开火漆下的秘密');
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        secret.hidden = false;
+        requestAnimationFrame(() => secret.classList.add('is-visible'));
+      } else {
+        secret.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { secret.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     藏头诗
+     ------------------------------------------------------------ */
+  function initAcrostic() {
+    const button = $('#readAcrostic');
+    const poem = $('#poem');
+    const answer = $('#acrosticAnswer');
+    if (!button || !poem || !answer) return;
+
+    let closeTimer = 0;
+
+    button.addEventListener('click', () => {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      const label = $('span', button);
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        answer.hidden = false;
+        requestAnimationFrame(() => answer.classList.add('is-visible'));
+        poem.classList.add('is-revealed');
+        button.setAttribute('aria-expanded', 'true');
+        if (label) label.textContent = '收好这四个字';
+        window.setTimeout(() => {
+          answer.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+          });
+        }, 90);
+      } else {
+        answer.classList.remove('is-visible');
+        poem.classList.remove('is-revealed');
+        button.setAttribute('aria-expanded', 'false');
+        if (label) label.textContent = '读出藏头';
+        closeTimer = window.setTimeout(() => { answer.hidden = true; }, 500);
+      }
+    });
   }
 
   /* ------------------------------------------------------------
@@ -1317,6 +1450,10 @@
     initParallax();
     initAccordion();
     initPromises();
+    initTimeline();
+    initUnsent();
+    initLetterSecret();
+    initAcrostic();
     initStarMap();
     initSound();
     initFinale();

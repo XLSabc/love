@@ -13,9 +13,7 @@
   <title>致你｜一封写给你的信</title>
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="assets/fonts/noto-serif-sc-subset.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/cormorant-garamond-subset.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/cormorant-garamond-italic-subset.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
   <script>document.documentElement.classList.add('js');</script>
   <script src="js/config.js" defer></script>
@@ -93,7 +91,7 @@
       <div class="topbar__chapter">
         <span id="chapterNum">01</span>
         <i>/</i>
-        <span>07</span>
+        <span>08</span>
         <b id="chapterName">序</b>
       </div>
     </div>
@@ -108,7 +106,8 @@
       <a href="#chapter-04" data-section="chapter-04"><span>04</span><em>理由</em></a>
       <a href="#chapter-05" data-section="chapter-05"><span>05</span><em>信</em></a>
       <a href="#chapter-06" data-section="chapter-06"><span>06</span><em>以后</em></a>
-      <a href="#chapter-07" data-section="chapter-07"><span>07</span><em>答案</em></a>
+      <a href="#chapter-07" data-section="chapter-07"><span>07</span><em>诗</em></a>
+      <a href="#chapter-08" data-section="chapter-08"><span>08</span><em>答案</em></a>
     </nav>
   </aside>
 
@@ -374,6 +373,78 @@
             </article>
           </div>
         </div>
+
+        <!-- 心动时间线 -->
+        <section class="timeline" aria-labelledby="timelineTitle">
+          <header class="timeline__head">
+            <div data-reveal>
+              <span class="timeline__eyebrow">A SMALL CHRONOLOGY / 心动时间线</span>
+              <h3 id="timelineTitle">把喜欢排成一条线，<br>每个节点都有你。</h3>
+            </div>
+            <p data-reveal>没有具体的日期。<br>但每一个“第一次”，我都记得。</p>
+          </header>
+
+          <div class="timeline__body">
+            <span class="timeline__rail" aria-hidden="true"><i id="timelineProgress"></i></span>
+            <ol class="timeline__list">
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>00</span><em>BEFORE YOU</em></div>
+                  <h4>还没遇见你的时候</h4>
+                  <p>日子过得很快，也没有什么不好。只是后来才知道，那种平静，是因为还没有遇见你。</p>
+                </div>
+              </li>
+
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>01</span><em>THE FIRST GLANCE</em></div>
+                  <h4>第一眼，其实很普通</h4>
+                  <p>具体是哪一天，我已经说不清了。只记得你站在光里，我忽然不知道该把手放在哪里。后来每次想起，那一秒都会被我自己偷偷加长。</p>
+                </div>
+              </li>
+
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>02</span><em>PAST MIDNIGHT</em></div>
+                  <h4>第一次聊到很晚</h4>
+                  <p>我们说了很多不重要的话。挂掉电话以后，房间安静下来，我却觉得整颗心还是满的。原来有人陪着说话，连夜都会变短。</p>
+                </div>
+              </li>
+
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>03</span><em>MISSING YOU</em></div>
+                  <h4>第一次想你</h4>
+                  <p>在一个没有任何预兆的下午，你从脑海里路过。我手里那杯水，忘了要喝。那天我才知道，想念是没有声音的。</p>
+                </div>
+              </li>
+
+              <li class="timeline__item" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>04</span><em>THE DECISION</em></div>
+                  <h4>决定把喜欢告诉你</h4>
+                  <p>我用了很久才承认，喜欢不是一件需要藏起来的事。至少对你，不该藏。于是有了这封信，有了你正在看的这一页。</p>
+                </div>
+              </li>
+
+              <li class="timeline__item timeline__item--now" data-reveal>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>NOW</span><em>THIS MOMENT</em></div>
+                  <h4>此刻</h4>
+                  <p>信停在这里，故事还没有。接下来的空白，我想留给我们一起写。</p>
+                </div>
+              </li>
+            </ol>
+
+            <p class="timeline__end" aria-hidden="true"><span>✦</span> TO BE CONTINUED / 未完待续</p>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -432,7 +503,7 @@
           <aside class="reasons__side" data-reveal>
             <span class="reasons__big" aria-hidden="true">WHY</span>
             <blockquote>“如果喜欢有形状，<br>大概是你看向我时，<br>世界刚好安静下来。”</blockquote>
-            <span class="reasons__count"><b>06</b> / REASONS</span>
+            <span class="reasons__count"><b>08</b> / REASONS</span>
           </aside>
 
           <div class="accordion" data-reveal>
@@ -513,6 +584,32 @@
                 <div class="reason__panel-inner"><p>如果喜欢可以被逐条解释，那它大概就不叫喜欢了。剩下的部分，没有逻辑，也没有尽头。我想用很久很久，慢慢告诉你。</p></div>
               </div>
             </article>
+
+            <article class="reason">
+              <h3>
+                <button class="reason__trigger" type="button" aria-expanded="false" aria-controls="reasonPanel7">
+                  <span class="reason__index">07</span>
+                  <span class="reason__title">你让我开始期待明天</span>
+                  <span class="reason__icon" aria-hidden="true"><i></i><i></i></span>
+                </button>
+              </h3>
+              <div class="reason__panel" id="reasonPanel7">
+                <div class="reason__panel-inner"><p>以前日子是过完的，现在日子是等着见你的。哪怕明天没有任何安排，只要想到可能会遇见你，今天就有了盼头。</p></div>
+              </div>
+            </article>
+
+            <article class="reason">
+              <h3>
+                <button class="reason__trigger" type="button" aria-expanded="false" aria-controls="reasonPanel8">
+                  <span class="reason__index">08</span>
+                  <span class="reason__title">你不经意的温柔</span>
+                  <span class="reason__icon" aria-hidden="true"><i></i><i></i></span>
+                </button>
+              </h3>
+              <div class="reason__panel" id="reasonPanel8">
+                <div class="reason__panel-inner"><p>你递东西时会先把尖的那头朝向自己，你记得别人不吃什么。你对世界的温柔，大概就是我最想收藏的那一种。</p></div>
+              </div>
+            </article>
           </div>
         </div>
       </div>
@@ -559,12 +656,77 @@
 
             <p class="letter__ps">P.S. 写完这封信的时候，窗外刚好起风了。<br>我把它当作一个很轻的预兆。</p>
 
-            <div class="letter__seal" aria-hidden="true"><span>私</span></div>
+            <button class="letter__seal" id="letterSeal" type="button" aria-expanded="false" aria-controls="letterSecret" aria-label="打开火漆下的秘密">
+              <span>私</span>
+              <small>轻触</small>
+            </button>
             <span class="letter__fold" aria-hidden="true"></span>
           </article>
 
+          <div class="letter__secret" id="letterSecret" hidden>
+            <span>UNDER THE SEAL / 火漆之下</span>
+            <p>如果最后的人不是你，我大概会遗憾很久很久。</p>
+          </div>
+
           <p class="letter__hint" data-reveal>— 信纸有折痕，喜欢也是。</p>
         </div>
+
+        <!-- 三封没有寄出的短信 -->
+        <section class="unsent" aria-labelledby="unsentTitle">
+          <header class="unsent__head">
+            <div data-reveal>
+              <span class="unsent__eyebrow">THREE MESSAGES I NEVER SENT</span>
+              <h3 id="unsentTitle">三封没有寄出的短信</h3>
+            </div>
+            <p data-reveal>有些话，写完就删掉了。<br>其实它们一直在这里。</p>
+          </header>
+
+          <div class="unsent__grid">
+            <article class="unsent-note is-open" data-reveal>
+              <button class="unsent-note__toggle" type="button" aria-expanded="true" aria-controls="unsentBody1">
+                <span class="unsent-note__no">01</span>
+                <span class="unsent-note__label">写在一个没有发出的晚上</span>
+                <span class="unsent-note__open"><i aria-hidden="true">+</i><span>收起</span></span>
+              </button>
+              <div class="unsent-note__body" id="unsentBody1">
+                <div>
+                  <p>今天路过你常去的那家店，脚步慢了一点。没有进去，也没有告诉你。后来我在门口站了一会儿，觉得这样也算见过你了。</p>
+                  <span>— 没有发送</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="unsent-note" data-reveal style="--d: 90ms">
+              <button class="unsent-note__toggle" type="button" aria-expanded="false" aria-controls="unsentBody2">
+                <span class="unsent-note__no">02</span>
+                <span class="unsent-note__label">删掉又打回来的那句话</span>
+                <span class="unsent-note__open"><i aria-hidden="true">+</i><span>展开</span></span>
+              </button>
+              <div class="unsent-note__body" id="unsentBody2">
+                <div>
+                  <p>其实我想说的不是“早点睡”，是“能不能再陪我一会儿”。可最后发出去的，还是那句很懂事的晚安。</p>
+                  <span>— 草稿箱 · 03:17</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="unsent-note" data-reveal style="--d: 180ms">
+              <button class="unsent-note__toggle" type="button" aria-expanded="false" aria-controls="unsentBody3">
+                <span class="unsent-note__no">03</span>
+                <span class="unsent-note__label">等以后再给你看的一页</span>
+                <span class="unsent-note__open"><i aria-hidden="true">+</i><span>展开</span></span>
+              </button>
+              <div class="unsent-note__body" id="unsentBody3">
+                <div>
+                  <p>如果有一天我们真的在一起了，我想把这张纸拿出来给你看，然后告诉你：你看，我那时候就在想以后了。</p>
+                  <span>— 留给以后</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <p class="unsent__foot" data-reveal>有些话没有发出去，不代表它们没有发生过。</p>
+        </section>
       </div>
     </section>
 
@@ -617,11 +779,172 @@
         </div>
 
         <p class="promise-counter" data-reveal aria-live="polite"><span id="promiseCount">0</span> / 6 <i>已收进口袋</i></p>
+
+        <!-- 四季 -->
+        <section class="seasons" aria-labelledby="seasonsTitle">
+          <header class="seasons__head">
+            <div data-reveal>
+              <span class="seasons__eyebrow">FOUR SEASONS / 四季</span>
+              <h3 id="seasonsTitle">如果可以，<br>想和你把四季都过一遍。</h3>
+            </div>
+            <p data-reveal>不是四个季节。<br>是四种和你有关的以后。</p>
+          </header>
+
+          <div class="seasons__grid">
+            <article class="season season--spring" data-reveal>
+              <span class="season__ghost" aria-hidden="true">春</span>
+              <div class="season__top"><span>SPRING</span><span>NO. 01</span></div>
+              <div class="season__art" aria-hidden="true">
+                <svg viewBox="0 0 220 220" fill="none">
+                  <circle cx="158" cy="62" r="40" fill="currentColor" opacity=".13"/>
+                  <path d="M52 214C62 164 70 122 108 78C122 64 128 52 128 36" stroke="currentColor" stroke-width="1.1"/>
+                  <path d="M78 158C60 150 50 132 52 116C70 122 82 138 78 158Z" stroke="currentColor" stroke-width="1"/>
+                  <path d="M94 120C80 108 76 90 82 74C98 84 104 104 94 120Z" stroke="currentColor" stroke-width="1"/>
+                  <path d="M108 78C122 90 140 90 152 78C140 62 120 62 108 78Z" stroke="currentColor" stroke-width="1"/>
+                  <path d="M128 36C134 20 146 14 160 16C154 30 144 38 128 36Z" stroke="currentColor" stroke-width="1"/>
+                  <circle cx="128" cy="36" r="4.5" fill="currentColor"/>
+                  <circle cx="112" cy="55" r="3.2" fill="currentColor"/>
+                  <circle cx="146" cy="56" r="2.6" fill="currentColor"/>
+                  <circle cx="48" cy="80" r="1.2" fill="currentColor"/>
+                  <circle cx="182" cy="148" r="1.4" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="season__foot">
+                <span class="season__cn">春</span>
+                <p>去看一场花开，在树下站很久。</p>
+                <small>BLOOM WITH YOU</small>
+              </div>
+            </article>
+
+            <article class="season season--summer" data-reveal style="--d: 80ms">
+              <span class="season__ghost" aria-hidden="true">夏</span>
+              <div class="season__top"><span>SUMMER</span><span>NO. 02</span></div>
+              <div class="season__art" aria-hidden="true">
+                <svg viewBox="0 0 220 220" fill="none">
+                  <circle cx="142" cy="74" r="43" fill="currentColor" opacity=".14"/>
+                  <circle cx="142" cy="74" r="43" stroke="currentColor" stroke-width="1"/>
+                  <path d="M142 12v14M142 122v14M80 74H66M218 74h-14M96 28l9 9M179 111l9 9M188 28l-9 9M105 111l-9 9" stroke="currentColor" stroke-width=".9" opacity=".7"/>
+                  <path d="M28 166C48 154 68 178 88 166C108 154 128 178 148 166C168 154 188 178 208 166" stroke="currentColor" stroke-width="1"/>
+                  <path d="M28 188C48 176 68 200 88 188C108 176 128 200 148 188C168 176 188 200 208 188" stroke="currentColor" stroke-width="1" opacity=".55"/>
+                  <path d="M28 210C48 198 68 222 88 210C108 198 128 222 148 210C168 198 188 222 208 210" stroke="currentColor" stroke-width="1" opacity=".28"/>
+                  <circle cx="54" cy="54" r="1.4" fill="currentColor"/>
+                  <circle cx="184" cy="136" r="1.2" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="season__foot">
+                <span class="season__cn">夏</span>
+                <p>分一半西瓜，等一场很慢的晚风。</p>
+                <small>SLOW SUMMER, WITH YOU</small>
+              </div>
+            </article>
+
+            <article class="season season--autumn" data-reveal style="--d: 160ms">
+              <span class="season__ghost" aria-hidden="true">秋</span>
+              <div class="season__top"><span>AUTUMN</span><span>NO. 03</span></div>
+              <div class="season__art" aria-hidden="true">
+                <svg viewBox="0 0 220 220" fill="none">
+                  <circle cx="154" cy="78" r="48" stroke="currentColor" stroke-width="1" opacity=".25"/>
+                  <path d="M58 202C64 158 88 130 128 108" stroke="currentColor" stroke-width="1.1"/>
+                  <path d="M106 146C88 152 72 142 66 124C84 118 104 126 106 146Z" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1"/>
+                  <path d="M128 108C146 96 166 104 174 120C156 130 136 126 128 108Z" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1"/>
+                  <path d="M82 176C66 182 52 170 50 154C66 148 82 158 82 176Z" stroke="currentColor" stroke-width="1"/>
+                  <path d="M128 108C124 90 134 74 150 68C156 86 146 104 128 108Z" stroke="currentColor" stroke-width="1"/>
+                  <path d="M58 202C82 196 104 202 118 218" stroke="currentColor" stroke-width="1" opacity=".55"/>
+                  <circle cx="154" cy="78" r="2" fill="currentColor"/>
+                  <circle cx="44" cy="76" r="1.2" fill="currentColor"/>
+                  <circle cx="188" cy="164" r="1.4" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="season__foot">
+                <span class="season__cn">秋</span>
+                <p>踩落叶，买一袋热乎乎的栗子。</p>
+                <small>WARM HANDS, COLD AIR</small>
+              </div>
+            </article>
+
+            <article class="season season--winter" data-reveal style="--d: 240ms">
+              <span class="season__ghost" aria-hidden="true">冬</span>
+              <div class="season__top"><span>WINTER</span><span>NO. 04</span></div>
+              <div class="season__art" aria-hidden="true">
+                <svg viewBox="0 0 220 220" fill="none">
+                  <path d="M150 38C120 50 102 78 102 108C102 142 128 168 162 168C178 168 192 163 202 154C188 182 160 198 128 198C86 198 52 164 52 122C52 82 82 48 122 38C132 35 141 35 150 38Z" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1"/>
+                  <path d="M170 64l2 14 13-6M176 98l-8 10-9-12M196 112l-12 8 14 7M86 56l-1 12-12-5M70 92l10 9-13 8M72 134l12-5-2 13" stroke="currentColor" stroke-width=".8" opacity=".65"/>
+                  <circle cx="170" cy="64" r="1.5" fill="currentColor"/>
+                  <circle cx="86" cy="56" r="1.2" fill="currentColor"/>
+                  <circle cx="72" cy="134" r="1.2" fill="currentColor"/>
+                  <circle cx="188" cy="146" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="season__foot">
+                <span class="season__cn">冬</span>
+                <p>把手放进你的口袋，走一条很长的路。</p>
+                <small>ONE LONG WALK HOME</small>
+              </div>
+            </article>
+          </div>
+
+          <p class="seasons__end" data-reveal><span aria-hidden="true">✦</span> 四季会循环，想和你做的事，不会完。</p>
+        </section>
       </div>
     </section>
 
-    <!-- 07 · 答案 -->
-    <section class="finale" id="chapter-07" data-chapter="07" data-label="答案" aria-labelledby="finaleTitle">
+    <!-- 07 · 诗 -->
+    <section class="poem-section" id="chapter-07" data-chapter="07" data-label="诗" data-nav="red" aria-labelledby="poemTitle">
+      <div class="poem-section__moon" aria-hidden="true"></div>
+      <div class="poem-section__orbit" aria-hidden="true"></div>
+
+      <div class="wrap">
+        <header class="poem__head">
+          <div>
+            <p class="kicker kicker--light" data-reveal><span>CHAPTER 07</span><i class="rule" aria-hidden="true"></i><span>一首很短的藏头诗</span></p>
+            <h2 id="poemTitle" data-reveal>把想说的话，<br>藏在每一行的<br class="poem-break"><em>第一个字</em>里。</h2>
+          </div>
+          <p class="poem__intro" data-reveal>如果风愿意替我读，<br>它大概会读得很慢。</p>
+        </header>
+
+        <div class="poem" id="poem" data-reveal>
+          <div class="poem__meta">
+            <span>A SMALL POEM / NO. 01</span>
+            <span data-date>2026.10.20</span>
+          </div>
+
+          <div class="poem__columns">
+            <div class="poem__col" style="--i: 0">
+              <span class="poem__first">我</span>
+              <span class="poem__rest">把四季折成信纸</span>
+            </div>
+            <div class="poem__col" style="--i: 1">
+              <span class="poem__first">喜</span>
+              <span class="poem__rest">欢藏在每一个字</span>
+            </div>
+            <div class="poem__col" style="--i: 2">
+              <span class="poem__first">欢</span>
+              <span class="poem__rest">喜不必惊动世界</span>
+            </div>
+            <div class="poem__col" style="--i: 3">
+              <span class="poem__first">你</span>
+              <span class="poem__rest">读到这里就好</span>
+            </div>
+          </div>
+
+          <div class="poem__footer">
+            <button class="poem__button" id="readAcrostic" type="button" aria-expanded="false" aria-controls="acrosticAnswer">
+              <span>读出藏头</span><i aria-hidden="true">→</i>
+            </button>
+
+            <div class="poem__answer" id="acrosticAnswer" hidden aria-live="polite">
+              <span>连起来，是我最想说的四个字</span>
+              <strong>我喜欢你</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="poem__seal" aria-hidden="true"><span>藏</span></div>
+    </section>
+
+    <!-- 08 · 答案 -->
+    <section class="finale" id="chapter-08" data-chapter="08" data-label="答案" aria-labelledby="finaleTitle">
       <div class="finale__bg" aria-hidden="true">
         <div class="finale__sun"></div>
         <div class="finale__ring"></div>
@@ -630,7 +953,7 @@
       </div>
 
       <div class="finale__inner">
-        <p class="kicker kicker--light" data-reveal><span>CHAPTER 07</span><i class="rule" aria-hidden="true"></i><span>最后一个问题</span></p>
+        <p class="kicker kicker--light" data-reveal><span>CHAPTER 08</span><i class="rule" aria-hidden="true"></i><span>最后一个问题</span></p>
         <h2 id="finaleTitle" data-reveal>所以，<br>可以和我一起，<br><em>把以后写成故事吗？</em></h2>
 
         <div class="finale__actions" data-reveal>

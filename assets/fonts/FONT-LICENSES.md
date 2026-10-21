@@ -18,4 +18,6 @@ licensed under the SIL Open Font License, Version 1.1.
 The full license text is available at:
 https://openfontlicense.org/open-font-license-official-text/
 
-The subset files were generated specifically for the text used on this page.
+The subset files were generated specifically for the text used on this page. They
+are also embedded as data URIs in `css/fonts.css`, so the page works when opened
+directly from disk without a local web server.
