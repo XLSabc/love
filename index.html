@@ -24,6 +24,7 @@
   <a class="skip-link" href="#main">跳到正文</a>
 
   <div class="grain" aria-hidden="true"></div>
+  <div class="read-progress" aria-hidden="true"><i id="readProgress"></i></div>
   <div class="cursor" id="cursor" aria-hidden="true">
     <span class="cursor__dot"></span>
     <span class="cursor__ring"></span>
@@ -153,7 +154,7 @@
             <div class="arch-outline" aria-hidden="true"></div>
 
             <div class="hero-art__arch">
-              <div class="art-sun" aria-hidden="true"></div>
+              <button class="art-sun" id="sunSecret" type="button" aria-label="轻触太阳，读一行没有写进信里的话" aria-expanded="false" aria-controls="sunSecretNote"></button>
               <div class="art-halo" aria-hidden="true"></div>
 
               <svg class="art-botanical" viewBox="0 0 520 760" fill="none" aria-hidden="true">
@@ -203,6 +204,9 @@
                 <span>STUDY NO. 01</span>
                 <span>A QUIET DEVOTION</span>
               </div>
+
+              <p class="art-wish" id="wishNote" aria-live="polite" hidden>愿望收下了。<br>如果灵验，记得第一个告诉我。</p>
+              <p class="art-secret" id="sunSecretNote" aria-live="polite" hidden>你看见的是太阳，<br><em>我看见的是你。</em></p>
             </div>
 
             <div class="art-orbit-text" aria-hidden="true">
@@ -216,12 +220,12 @@
 
             <figcaption class="hero-art__cap">
               <span>FIG. 01</span>
-              <em>the reason of all things</em>
+              <button class="hero-art__reason" id="reasonSecret" type="button" aria-pressed="false" aria-label="翻到这幅画的背面"><em>the reason of all things</em></button>
             </figcaption>
 
-            <span class="art-star art-star--one" aria-hidden="true">✦</span>
+            <button class="art-star art-star--one" id="wishStar" type="button" aria-pressed="false" aria-label="对这颗星许个愿">✦</button>
             <span class="art-star art-star--two" aria-hidden="true">✧</span>
-            <span class="art-note" aria-hidden="true">你在这里</span>
+            <button class="art-note" id="hereSecret" type="button" aria-pressed="false" aria-label="轻触这行竖排小字">你在这里</button>
           </figure>
         </div>
 
@@ -229,7 +233,7 @@
           <span><i>TO</i><b data-recipient>你</b></span>
           <span><i>FROM</i><b data-sender>一个喜欢你的人</b></span>
           <span><i>DATE</i><b data-date>2026.10.20</b></span>
-          <span><i>READING TIME</i><b>慢慢读，不着急</b></span>
+          <span><i>READING TIME</i><button class="hero__meta-secret" id="readingSecret" type="button" aria-pressed="false" aria-label="把阅读时间调慢一点"><b>慢慢读，不着急</b></button></span>
         </div>
       </div>
     </section>
@@ -332,7 +336,7 @@
             </article>
 
             <article class="moment" data-reveal style="--d: 90ms">
-              <div class="moment__visual moment__visual--night" aria-hidden="true">
+              <div class="moment__visual moment__visual--night moment__visual--interactive" role="button" tabindex="0" aria-label="轻触月亮，读一句没有发出去的话" aria-expanded="false" aria-controls="moonSecretNote">
                 <span class="moment__label">MOMENT 02</span>
                 <div class="art-moon"></div>
                 <span class="night-star night-star--one">✦</span>
@@ -349,6 +353,7 @@
                 <p class="moment__en">AFTER GOODNIGHT</p>
                 <h4>你说“晚安”之后</h4>
                 <p>聊天框暗下去，房间安静下来，只有那句晚安还亮着。我把它又读了一遍，才舍得睡。</p>
+                <div class="moment__moon-secret" id="moonSecretNote" aria-live="polite" hidden>其实那天晚上，<br>我把你的晚安读了很多遍。</div>
               </div>
             </article>
 
@@ -440,9 +445,18 @@
                   <p>信停在这里，故事还没有。接下来的空白，我想留给我们一起写。</p>
                 </div>
               </li>
+
+              <li class="timeline__item timeline__item--future" id="timelineAfter" hidden>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <div class="timeline__content">
+                  <div class="timeline__meta"><span>05</span><em>IF YOU SAY YES</em></div>
+                  <h4>下一页</h4>
+                  <p>这是唯一一条还没有发生的时间线。要不要一起写？</p>
+                </div>
+              </li>
             </ol>
 
-            <p class="timeline__end" aria-hidden="true"><span>✦</span> TO BE CONTINUED / 未完待续</p>
+            <button class="timeline__end" id="timelineMore" type="button" aria-expanded="false" aria-controls="timelineAfter" aria-label="续写时间线的下一页"><span aria-hidden="true">✦</span> TO BE CONTINUED / 未完待续</button>
           </div>
         </section>
       </div>
@@ -468,10 +482,10 @@
           <div class="sky__corner sky__corner--bl" aria-hidden="true"><span></span></div>
           <div class="sky__corner sky__corner--br" aria-hidden="true"><span></span></div>
 
-          <div class="sky__coords" aria-hidden="true">
+          <button class="sky__coords" id="skyCoords" type="button" aria-label="查看这组坐标的观测对象">
             <span>RA 00h 00m 01s</span>
             <span>DEC +31° 14′</span>
-          </div>
+          </button>
           <div class="sky__date" aria-hidden="true">OBSERVATION / <span data-date>2026.10.20</span></div>
 
           <div class="sky__stars" id="skyStars"></div>
@@ -481,6 +495,10 @@
             <h3 id="skyNoteTitle">初见</h3>
             <p id="skyNoteText">那天你说了什么，我其实已经记不清了。只记得你抬头的时候，世界忽然安静了一下。</p>
             <span class="sky__note-line" aria-hidden="true"></span>
+            <button class="sky__secret" id="skySecret" type="button" hidden>
+              <span class="sky__secret-icon" aria-hidden="true">✦</span>
+              <span>还有一颗星，不在图上</span>
+            </button>
           </aside>
 
           <p class="sky__hint"><span aria-hidden="true">✦</span> MOVE / TAP · 点亮一颗星 <span aria-hidden="true">✦</span></p>
@@ -501,9 +519,11 @@
 
         <div class="reasons__layout">
           <aside class="reasons__side" data-reveal>
-            <span class="reasons__big" aria-hidden="true">WHY</span>
+            <button class="reasons__big" id="whySecretBtn" type="button" aria-expanded="false" aria-controls="whySecret" aria-label="轻触 WHY，读最后一条理由">WHY</button>
             <blockquote>“如果喜欢有形状，<br>大概是你看向我时，<br>世界刚好安静下来。”</blockquote>
-            <span class="reasons__count"><b>08</b> / REASONS</span>
+            <p class="reasons__why-secret" id="whySecret" aria-live="polite" hidden>真正的理由，<br>是没有理由。因为是你。</p>
+            <button class="reasons__count" id="reasonsCountSecret" type="button" aria-expanded="false" aria-controls="reasonsCountNote"><b>08</b> / REASONS</button>
+            <p class="reasons__count-note" id="reasonsCountNote" aria-live="polite" hidden>一开始只想写三条。<br>后来发现，理由比我想象的多。</p>
           </aside>
 
           <div class="accordion" data-reveal>
@@ -612,6 +632,8 @@
             </article>
           </div>
         </div>
+
+        <p class="reason-extra" id="reasonExtra" aria-live="polite" hidden>第九条理由：<em>因为是你。</em></p>
       </div>
     </section>
 
@@ -628,13 +650,15 @@
           <article class="letter" data-reveal>
             <div class="letter__top">
               <span>PRIVATE CORRESPONDENCE</span>
-              <span>PAGE 01 / 01</span>
+              <button class="letter__page" id="pageSecret" type="button" aria-pressed="false" aria-label="翻到信的另一页">PAGE 01 / 01</button>
             </div>
 
-            <div class="letter__stamp" aria-hidden="true">
+            <button class="letter__stamp" id="stampSecret" type="button" aria-expanded="false" aria-controls="stampNote" aria-label="打开邮戳下的一句话">
               <span>私<br>藏</span>
-              <i></i>
-            </div>
+              <i aria-hidden="true"></i>
+            </button>
+
+            <p class="letter__stamp-note" id="stampNote" aria-live="polite" hidden>这封信没有寄出去。<br>因为我想亲手交给你。</p>
 
             <div class="letter__body">
               <p class="letter__salutation">亲爱的<span data-recipient>你</span>：</p>
@@ -644,17 +668,22 @@
 
               <p>我喜欢你，不是因为你刚好出现，也不是因为那天风很温柔。是因为你成为你以后，我的世界才开始有了偏向。人群还是人群，日子还是日子，只是我的目光，总会先一步找到你。</p>
 
-              <p>我知道喜欢不该成为负担。所以你不用急着回答，也不用因为被喜欢而觉得抱歉。你可以慢慢走，慢慢想，慢慢确认。<span class="letter__mark">我会把这份心意放在这里，不催你，也不收回。</span></p>
+              <p>我知道喜欢不该成为负担。所以你不用急着回答，也不用因为被喜欢而觉得抱歉。你可以慢慢走，慢慢想，慢慢确认。<span class="letter__mark">我会把这份心意放在这里，不催你，也不收回。</span><button class="letter__footnote-mark" id="letterFootnote" type="button" aria-expanded="false" aria-controls="letterFootnoteNote" aria-label="展开这句话旁边的注脚">†</button></p>
 
               <p>只是如果你也有一点点喜欢我，可不可以，稍微往前走一步？剩下的路，我来走。</p>
 
               <p>祝你今天也有好事发生。祝你被温柔对待，祝你想到我的时候，嘴角会轻轻弯一下。</p>
 
-              <p class="letter__close">—— 一个喜欢你的人</p>
-              <p class="letter__date"><span data-date>2026.10.20</span> · 写于一个想你的晚上</p>
+              <button class="letter__close" id="signSecret" type="button" aria-expanded="false" aria-controls="signNote">—— 一个喜欢你的人</button>
+              <p class="letter__sign-note" id="signNote" aria-live="polite" hidden>签下名字的时候，我停了一下。<br>好像写下这几个字，喜欢就真的算数了。</p>
+              <button class="letter__date" id="letterDateSecret" type="button" aria-expanded="false" aria-controls="dateNote" aria-label="展开日期旁的一句话"><span data-date>2026.10.20</span> · 写于一个想你的晚上</button>
+              <p class="letter__date-note" id="dateNote" aria-live="polite" hidden>其实那天我写到凌晨三点。<br>删掉了七次开头，才留下你看到的这一句。</p>
             </div>
 
-            <p class="letter__ps">P.S. 写完这封信的时候，窗外刚好起风了。<br>我把它当作一个很轻的预兆。</p>
+            <button class="letter__ps" id="psSecret" type="button" aria-expanded="false" aria-controls="ppsNote">P.S. 写完这封信的时候，窗外刚好起风了。<br>我把它当作一个很轻的预兆。</button>
+            <p class="letter__pps" id="ppsNote" aria-live="polite" hidden>P.P.S. 还有一句，写在这里又觉得太轻：<br>如果你愿意，下次换我走向你。</p>
+
+            <p class="letter__footnote" id="letterFootnoteNote" aria-live="polite" hidden><span aria-hidden="true">†</span> 写这句话的时候，我其实很怕。但我更怕你从来没有机会知道。</p>
 
             <button class="letter__seal" id="letterSeal" type="button" aria-expanded="false" aria-controls="letterSecret" aria-label="打开火漆下的秘密">
               <span>私</span>
@@ -726,6 +755,7 @@
           </div>
 
           <p class="unsent__foot" data-reveal>有些话没有发出去，不代表它们没有发生过。</p>
+          <p class="unsent__extra" id="unsentExtra" aria-live="polite" hidden>其实草稿箱里还有一封。收件人是你，正文是：<em>在不在？</em></p>
         </section>
       </div>
     </section>
@@ -779,6 +809,7 @@
         </div>
 
         <p class="promise-counter" data-reveal aria-live="polite"><span id="promiseCount">0</span> / 6 <i>已收进口袋</i></p>
+        <p class="promise-extra" id="promiseExtra" aria-live="polite" hidden>第七件事：<em>把前面六件，一件一件做完。</em></p>
 
         <!-- 四季 -->
         <section class="seasons" aria-labelledby="seasonsTitle">
@@ -791,7 +822,7 @@
           </header>
 
           <div class="seasons__grid">
-            <article class="season season--spring" data-reveal>
+            <article class="season season--spring" data-reveal role="button" tabindex="0" aria-pressed="false" aria-label="春 · 去看一场花开">
               <span class="season__ghost" aria-hidden="true">春</span>
               <div class="season__top"><span>SPRING</span><span>NO. 01</span></div>
               <div class="season__art" aria-hidden="true">
@@ -816,7 +847,7 @@
               </div>
             </article>
 
-            <article class="season season--summer" data-reveal style="--d: 80ms">
+            <article class="season season--summer" data-reveal style="--d: 80ms" role="button" tabindex="0" aria-pressed="false" aria-label="夏 · 分一半西瓜，等一场很慢的晚风">
               <span class="season__ghost" aria-hidden="true">夏</span>
               <div class="season__top"><span>SUMMER</span><span>NO. 02</span></div>
               <div class="season__art" aria-hidden="true">
@@ -838,7 +869,7 @@
               </div>
             </article>
 
-            <article class="season season--autumn" data-reveal style="--d: 160ms">
+            <article class="season season--autumn" data-reveal style="--d: 160ms" role="button" tabindex="0" aria-pressed="false" aria-label="秋 · 踩落叶，买一袋热乎乎的栗子">
               <span class="season__ghost" aria-hidden="true">秋</span>
               <div class="season__top"><span>AUTUMN</span><span>NO. 03</span></div>
               <div class="season__art" aria-hidden="true">
@@ -862,7 +893,7 @@
               </div>
             </article>
 
-            <article class="season season--winter" data-reveal style="--d: 240ms">
+            <article class="season season--winter" data-reveal style="--d: 240ms" role="button" tabindex="0" aria-pressed="false" aria-label="冬 · 把手放进你的口袋，走一条很长的路">
               <span class="season__ghost" aria-hidden="true">冬</span>
               <div class="season__top"><span>WINTER</span><span>NO. 04</span></div>
               <div class="season__art" aria-hidden="true">
@@ -881,6 +912,12 @@
                 <small>ONE LONG WALK HOME</small>
               </div>
             </article>
+          </div>
+
+          <div class="season-extra" id="seasonExtra" aria-live="polite" hidden>
+            <span class="season-extra__label">THE FIFTH SEASON / 第五季</span>
+            <p>和你在一起的每一天。</p>
+            <small>AFTER SPRING, SUMMER, AUTUMN, WINTER</small>
           </div>
 
           <p class="seasons__end" data-reveal><span aria-hidden="true">✦</span> 四季会循环，想和你做的事，不会完。</p>
@@ -934,13 +971,18 @@
 
             <div class="poem__answer" id="acrosticAnswer" hidden aria-live="polite">
               <span>连起来，是我最想说的四个字</span>
-              <strong>我喜欢你</strong>
+              <button class="poem__answer-word" id="answerSecret" type="button" aria-expanded="false" aria-controls="answerNote"><strong>我喜欢你</strong></button>
+              <p class="poem__answer-note" id="answerNote" aria-live="polite" hidden>这四个字，我练习了很久。<br>现在终于可以把它放在你面前。</p>
+              <button class="poem__more" id="poemMore" type="button" aria-expanded="false" aria-controls="poemMoreLine">再读一行 <i aria-hidden="true">→</i></button>
+              <p class="poem__more-line" id="poemMoreLine" aria-live="polite" hidden>藏头之后，还有一句没有藏：<br><em>我想和你，把日子过成诗。</em></p>
             </div>
           </div>
         </div>
+
+        <p class="poem__echo" id="poemEcho" aria-live="polite" hidden>藏头是诗，<em>藏不住的是喜欢。</em></p>
       </div>
 
-      <div class="poem__seal" aria-hidden="true"><span>藏</span></div>
+      <button class="poem__seal" id="poemSeal" type="button" aria-expanded="false" aria-controls="poemEcho" aria-label="轻触印章，翻开诗的另一面"><span>藏</span></button>
     </section>
 
     <!-- 08 · 答案 -->
@@ -954,7 +996,8 @@
 
       <div class="finale__inner">
         <p class="kicker kicker--light" data-reveal><span>CHAPTER 08</span><i class="rule" aria-hidden="true"></i><span>最后一个问题</span></p>
-        <h2 id="finaleTitle" data-reveal>所以，<br>可以和我一起，<br><em>把以后写成故事吗？</em></h2>
+        <h2 id="finaleTitle" data-reveal>所以，<br>可以和我一起，<br><em>把以后写成故事吗<button class="finale__question" id="questionSecret" type="button" aria-expanded="false" aria-controls="questionNote" aria-label="问号的背面">？</button></em></h2>
+        <p class="finale__question-note" id="questionNote" aria-live="polite" hidden>这个问题，我在心里问过自己很多次。<br>每一次的答案，都是你。</p>
 
         <div class="finale__actions" data-reveal>
           <button class="btn btn--primary" id="sayYes" type="button">
@@ -971,14 +1014,37 @@
           <p>没关系呀。喜欢不是一道必须现在作答的题。<br>你可以慢慢想，我会把这一页留白，等你。</p>
         </div>
 
-        <p class="finale__note" data-reveal>无论答案是什么，谢谢你读到这里。</p>
+        <p class="finale__note" data-reveal>无论答案是什么，谢谢你读到这里。<button class="finale__secret" id="finaleSecret" type="button" aria-expanded="false" aria-controls="finaleSecretNote" aria-label="一个没有说出口的答案">✦</button></p>
+        <p class="finale__secret-note" id="finaleSecretNote" aria-live="polite" hidden>其实在你读到这里之前，<br>我已经在心里回答过很多遍了。</p>
       </div>
 
-      <div class="finale__scroll" aria-hidden="true">
-        <span>THE END?</span>
-        <i></i>
-        <span>OR THE BEGINNING</span>
+      <div class="finale__scroll">
+        <span aria-hidden="true">THE END?</span>
+        <i aria-hidden="true"></i>
+        <button class="finale__continue" id="openEpilogue" type="button" aria-expanded="false" aria-controls="epilogue">OR THE BEGINNING <i aria-hidden="true">→</i></button>
       </div>
+    </section>
+
+    <section class="epilogue-section" id="epilogue" aria-labelledby="epilogueTitle" hidden>
+      <div class="epilogue__inner">
+        <p class="kicker epilogue__kicker"><span>PAGE 09 · AFTERWORD</span><i class="rule" aria-hidden="true"></i><span>后记 · 没有结尾</span></p>
+        <h2 id="epilogueTitle">信写完了，<br>但我还没有说完。</h2>
+        <div class="epilogue__body">
+          <p>如果喜欢一个人有终点，那大概不是在一起，也不是被拒绝。是我终于可以把这份心意，完整地、不慌不忙地交到你手里。</p>
+          <p>现在，它在你手里了。</p>
+        </div>
+        <div class="epilogue__list">
+          <span>如果以后有机会，我想和你做三件很小的事：</span>
+          <ol>
+            <li><i>01</i>一起逛一次超市，买两样都没吃过的东西。</li>
+            <li><i>02</i>在同一个房间里，各自做各自的事。</li>
+            <li><i>03</i>把今天过成以后会想起来的一天。</li>
+          </ol>
+        </div>
+        <p class="epilogue__sign">— 一个终于把信交出去的人</p>
+        <span class="epilogue__date" data-date>2026.10.20</span>
+      </div>
+      <span class="epilogue__ghost" aria-hidden="true">09</span>
     </section>
   </main>
 
@@ -988,12 +1054,52 @@
       <p>这一页，只为 <span data-recipient>你</span> 而写。</p>
       <a href="#top">回到开头 <span aria-hidden="true">↑</span></a>
     </div>
+
+    <p class="night-note" id="nightNote" aria-live="polite" hidden>凌晨好。这个时间还在读信的人，应该被好好抱住。</p>
+    <p class="night-note" id="timeNote" aria-live="polite" hidden>现在是 5:20。<br>正好，我也在想你。</p>
+    <p class="night-note" id="anniversaryNote" aria-live="polite" hidden>10.20。信上写的日子。<br>今天又读了一遍。</p>
+    <p class="night-note" id="returnNote" aria-live="polite" hidden>你又来了。<br>信还在这里，我也还在。</p>
+
+    <div class="wrap colophon">
+      <div class="colophon__grid">
+        <button class="colophon__cell colophon__cell--edition" id="colophonEdition" type="button" aria-expanded="false" aria-controls="colophonSecret" aria-label="展开版本附记">
+          <span class="colophon__label">EDITION</span>
+          <span class="colophon__value">NO. 001 / 001 <i aria-hidden="true">✦</i></span>
+        </button>
+        <div class="colophon__cell">
+          <span class="colophon__label">TYPEFACES</span>
+          <span class="colophon__value">Noto Serif SC<br>Cormorant Garamond</span>
+        </div>
+        <div class="colophon__cell">
+          <span class="colophon__label">SETTING</span>
+          <span class="colophon__value">A quiet room,<br>somewhere after midnight</span>
+        </div>
+      </div>
+      <p class="colophon__secret" id="colophonSecret" hidden>P.S. 这本小书原本没有最后一页。是你读到这里，它才有了结尾。</p>
+    </div>
+
     <div class="wrap footer__bottom">
       <span>© 2026 · PRIVATE EDITION</span>
       <span>MADE SLOWLY, WITH A VERY FULL HEART</span>
-      <span>NO. 001 / 001</span>
+      <span>FOR YOUR EYES ONLY</span>
     </div>
   </footer>
+
+  <div class="petal-field" id="petalField" aria-hidden="true"></div>
+
+  <p class="idle-note" id="idleNote" aria-live="polite" hidden>不用急着翻页。我会在这里等。</p>
+
+  <div class="secret-toast" id="loveSecret" role="status" aria-live="polite" hidden>
+    <span class="secret-toast__eyebrow">A SMALL DISCOVERY</span>
+    <p>你刚刚输入了 <em>love</em>。<br>而我想说的是：我也是。</p>
+    <span class="secret-toast__sign">— 藏在代码里的回答</span>
+  </div>
+
+  <div class="secret-toast secret-toast--copy" id="copySecret" role="status" aria-live="polite" hidden>
+    <span class="secret-toast__eyebrow">A SMALL KEEPSAKE</span>
+    <p>你带走了其中一句。<br>剩下的话，我留在这里。</p>
+    <span class="secret-toast__sign">— 请替我保管好</span>
+  </div>
 
   <!-- 回答彩蛋 -->
   <dialog class="yes-dialog" id="yesDialog" aria-labelledby="yesTitle">
@@ -1022,6 +1128,20 @@
 
         <p class="yes-sign">— <span data-sender>一个喜欢你的人</span></p>
       </div>
+    </div>
+  </dialog>
+
+  <dialog class="zero-dialog" id="zeroDialog" aria-labelledby="zeroTitle">
+    <div class="zero-stage">
+      <button class="yes-close zero-close" id="zeroClose" type="button" aria-label="关闭">
+        <span></span><span></span>
+      </button>
+      <span class="zero-eyebrow">CHAPTER 00 · 未寄出</span>
+      <h2 id="zeroTitle">写在寄出之前</h2>
+      <p class="zero-copy">这封信原本不打算寄出。<br>后来我想，喜欢一个人，如果连一次认真都没有，就太可惜了。</p>
+      <p class="zero-copy">所以有了这一页。不是要一个答案，只是想让你知道：<br>这份心意，是真的。</p>
+      <div class="zero-sign">— 一个在深夜里改了又改的人</div>
+      <span class="zero-date" data-date>2026.10.20</span>
     </div>
   </dialog>
 

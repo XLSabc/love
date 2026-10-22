@@ -17,6 +17,35 @@
 
   let motionReduced = reduceMotion.matches;
 
+  function bindNoteToggle(trigger, note, { scroll = 'nearest' } = {}) {
+    if (!trigger || !note) return;
+    let closeTimer = 0;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      trigger.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+        if (scroll) {
+          window.setTimeout(() => {
+            note.scrollIntoView({
+              behavior: motionReduced ? 'auto' : 'smooth',
+              block: scroll,
+              inline: 'nearest'
+            });
+          }, 90);
+        }
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
   /* ------------------------------------------------------------
      基础信息
      ------------------------------------------------------------ */
@@ -155,6 +184,7 @@
     const num = $('#chapterNum');
     const name = $('#chapterName');
     const progress = $('#railProgress');
+    const topProgress = $('#readProgress');
     if (!sections.length) return;
 
     let ticking = false;
@@ -185,12 +215,11 @@
         else link.removeAttribute('aria-current');
       });
 
-      if (progress) {
-        const doc = document.documentElement;
-        const max = doc.scrollHeight - window.innerHeight;
-        const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-        progress.style.transform = `scaleY(${ratio})`;
-      }
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      if (progress) progress.style.transform = `scaleY(${ratio})`;
+      if (topProgress) topProgress.style.transform = `scaleX(${ratio})`;
     };
 
     const request = () => {
@@ -303,9 +332,15 @@
      ------------------------------------------------------------ */
   function initAccordion() {
     const reasons = $$('.reason');
+    const extra = $('#reasonExtra');
     if (!reasons.length) return;
 
-    reasons.forEach(reason => {
+    const opened = new Set();
+    reasons.forEach((reason, index) => {
+      if (reason.classList.contains('is-open')) opened.add(index);
+    });
+
+    reasons.forEach((reason, index) => {
       const trigger = $('.reason__trigger', reason);
       if (!trigger) return;
 
@@ -321,6 +356,11 @@
         if (willOpen) {
           reason.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
+          opened.add(index);
+          if (extra && opened.size >= reasons.length && extra.hidden) {
+            extra.hidden = false;
+            requestAnimationFrame(() => extra.classList.add('is-visible'));
+          }
         }
       });
     });
@@ -332,6 +372,7 @@
   function initPromises() {
     const buttons = $$('.promise');
     const countEl = $('#promiseCount');
+    const extra = $('#promiseExtra');
     if (!buttons.length) return;
 
     const storageKey = 'letter-promises-v1';
@@ -355,6 +396,17 @@
         label.textContent = saved.length === buttons.length && saved.length > 0
           ? '都收好了，等你一起'
           : '已收进口袋';
+      }
+
+      if (extra) {
+        const complete = saved.length === buttons.length && saved.length > 0;
+        if (complete && extra.hidden) {
+          extra.hidden = false;
+          requestAnimationFrame(() => extra.classList.add('is-visible'));
+        } else if (!complete) {
+          extra.classList.remove('is-visible');
+          extra.hidden = true;
+        }
       }
     };
 
@@ -430,7 +482,13 @@
      ------------------------------------------------------------ */
   function initUnsent() {
     const notes = $$('.unsent-note');
+    const extra = $('#unsentExtra');
     if (!notes.length) return;
+
+    const opened = new Set();
+    notes.forEach((note, index) => {
+      if (note.classList.contains('is-open')) opened.add(index);
+    });
 
     const setOpen = (note, open) => {
       note.classList.toggle('is-open', open);
@@ -440,15 +498,219 @@
       if (action) action.textContent = open ? '收起' : '展开';
     };
 
-    notes.forEach(note => {
+    notes.forEach((note, index) => {
       const button = $('.unsent-note__toggle', note);
       if (!button) return;
 
       button.addEventListener('click', () => {
         const willOpen = !note.classList.contains('is-open');
         notes.forEach(other => setOpen(other, false));
-        if (willOpen) setOpen(note, true);
+        if (willOpen) {
+          setOpen(note, true);
+          opened.add(index);
+          if (extra && opened.size >= notes.length && extra.hidden) {
+            extra.hidden = false;
+            requestAnimationFrame(() => extra.classList.add('is-visible'));
+          }
+        }
       });
+    });
+  }
+
+  /* ------------------------------------------------------------
+     邮戳下的一句话
+     ------------------------------------------------------------ */
+  function initStampSecret() {
+    const stamp = $('#stampSecret');
+    const note = $('#stampNote');
+    if (!stamp || !note) return;
+
+    let closeTimer = 0;
+
+    stamp.addEventListener('click', () => {
+      const isOpen = stamp.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      stamp.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     日期旁的一句话
+     ------------------------------------------------------------ */
+  function initLetterDateSecret() {
+    const date = $('#letterDateSecret');
+    const note = $('#dateNote');
+    if (!date || !note) return;
+
+    let closeTimer = 0;
+
+    date.addEventListener('click', () => {
+      const isOpen = date.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      date.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+        window.setTimeout(() => {
+          note.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest'
+          });
+        }, 90);
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     一页信 / 落款 / P.S. / 问号 / 藏头 / WHY 计数
+     ------------------------------------------------------------ */
+  function initPageSecret() {
+    const page = $('#pageSecret');
+    if (!page) return;
+
+    page.addEventListener('click', () => {
+      const isOpen = page.getAttribute('aria-pressed') === 'true';
+      const next = !isOpen;
+      page.setAttribute('aria-pressed', String(next));
+      page.textContent = next ? 'PAGE 01 / ∞' : 'PAGE 01 / 01';
+    });
+  }
+
+  function initSignatureSecret() {
+    bindNoteToggle($('#signSecret'), $('#signNote'), { scroll: 'nearest' });
+  }
+
+  function initPostscriptSecret() {
+    bindNoteToggle($('#psSecret'), $('#ppsNote'), { scroll: 'nearest' });
+  }
+
+  function initQuestionSecret() {
+    bindNoteToggle($('#questionSecret'), $('#questionNote'), { scroll: 'nearest' });
+  }
+
+  function initAnswerSecret() {
+    bindNoteToggle($('#answerSecret'), $('#answerNote'), { scroll: 'nearest' });
+  }
+
+  function initPoemMore() {
+    bindNoteToggle($('#poemMore'), $('#poemMoreLine'), { scroll: 'center' });
+  }
+
+  function initReasonsCountSecret() {
+    bindNoteToggle($('#reasonsCountSecret'), $('#reasonsCountNote'), { scroll: 'nearest' });
+  }
+
+  function initTextSecrets() {
+    const reading = $('#readingSecret');
+    const readingLabel = reading ? $('b', reading) : null;
+    if (reading && readingLabel) {
+      reading.addEventListener('click', () => {
+        const isOpen = reading.getAttribute('aria-pressed') === 'true';
+        const next = !isOpen;
+        reading.setAttribute('aria-pressed', String(next));
+        readingLabel.textContent = next ? '读慢一点，我等你。' : '慢慢读，不着急';
+      });
+    }
+
+    const reason = $('#reasonSecret');
+    const reasonLabel = reason ? $('em', reason) : null;
+    if (reason && reasonLabel) {
+      reason.addEventListener('click', () => {
+        const isOpen = reason.getAttribute('aria-pressed') === 'true';
+        const next = !isOpen;
+        reason.setAttribute('aria-pressed', String(next));
+        reasonLabel.textContent = next ? 'the reason is you.' : 'the reason of all things';
+      });
+    }
+  }
+
+  /* ------------------------------------------------------------
+     只在某个时刻出现
+     ------------------------------------------------------------ */
+  function initTimeSecrets() {
+    const show = note => {
+      if (!note) return;
+      note.hidden = false;
+      requestAnimationFrame(() => note.classList.add('is-visible'));
+    };
+
+    const now = new Date();
+    if (now.getHours() === 5 && now.getMinutes() === 20) show($('#timeNote'));
+    if (now.getMonth() === 9 && now.getDate() === 20) show($('#anniversaryNote'));
+
+    let returning = false;
+    try {
+      returning = localStorage.getItem('letter-returned-v1') === '1';
+      localStorage.setItem('letter-returned-v1', '1');
+    } catch (err) {
+      returning = false;
+    }
+    if (returning) show($('#returnNote'));
+  }
+
+  /* ------------------------------------------------------------
+     Konami
+     ------------------------------------------------------------ */
+  function initKonami() {
+    const field = $('#petalField');
+    if (!field) return;
+
+    const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let position = 0;
+
+    const petals = () => {
+      if (!document.body.classList.contains('is-open')) return;
+      field.innerHTML = '';
+
+      if (motionReduced) {
+        const message = document.createElement('p');
+        message.className = 'petal-message';
+        message.textContent = '你居然记得这个。';
+        field.appendChild(message);
+        window.setTimeout(() => { field.innerHTML = ''; }, 2600);
+        return;
+      }
+
+      for (let i = 0; i < 22; i++) {
+        const petal = document.createElement('span');
+        petal.className = 'konami-petal';
+        petal.style.setProperty('--x', `${Math.random() * 100}vw`);
+        petal.style.setProperty('--size', `${7 + Math.random() * 11}px`);
+        petal.style.setProperty('--dur', `${2.8 + Math.random() * 2.4}s`);
+        petal.style.setProperty('--delay', `${Math.random() * 0.9}s`);
+        petal.style.setProperty('--rot', `${Math.random() * 180}deg`);
+        petal.style.setProperty('--drift', `${(Math.random() * 2 - 1) * 120}px`);
+        field.appendChild(petal);
+      }
+
+      window.setTimeout(() => { field.innerHTML = ''; }, 6200);
+    };
+
+    window.addEventListener('keydown', event => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (key === sequence[position]) {
+        position += 1;
+        if (position === sequence.length) {
+          position = 0;
+          petals();
+        }
+      } else {
+        position = key === sequence[0] ? 1 : 0;
+      }
     });
   }
 
@@ -472,9 +734,634 @@
       if (willOpen) {
         secret.hidden = false;
         requestAnimationFrame(() => secret.classList.add('is-visible'));
+        window.setTimeout(() => {
+          secret.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest'
+          });
+        }, 90);
       } else {
         secret.classList.remove('is-visible');
         closeTimer = window.setTimeout(() => { secret.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     版本附记 / 页脚彩蛋
+     ------------------------------------------------------------ */
+  function initColophon() {
+    const button = $('#colophonEdition');
+    const secret = $('#colophonSecret');
+    if (!button || !secret) return;
+
+    let closeTimer = 0;
+
+    button.addEventListener('click', () => {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      button.setAttribute('aria-expanded', String(willOpen));
+      button.setAttribute('aria-label', willOpen ? '收起版本附记' : '展开版本附记');
+      button.classList.toggle('is-open', willOpen);
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        secret.hidden = false;
+        requestAnimationFrame(() => secret.classList.add('is-visible'));
+        window.setTimeout(() => {
+          secret.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest'
+          });
+        }, 90);
+      } else {
+        secret.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { secret.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     轻微磁吸按钮
+     ------------------------------------------------------------ */
+  function initMagnetic() {
+    if (!finePointer.matches || motionReduced) return;
+
+    $$('.btn, .poem__button').forEach(button => {
+      const move = event => {
+        const rect = button.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        button.style.setProperty('--mx', `${(x * 4).toFixed(2)}px`);
+        button.style.setProperty('--my', `${(y * 3).toFixed(2)}px`);
+      };
+
+      const reset = () => {
+        button.style.setProperty('--mx', '0px');
+        button.style.setProperty('--my', '0px');
+      };
+
+      button.addEventListener('pointermove', move, { passive: true });
+      button.addEventListener('pointerleave', reset);
+      button.addEventListener('blur', reset);
+    });
+  }
+
+  /* ------------------------------------------------------------
+     复制走的一句
+     ------------------------------------------------------------ */
+  function initCopySecret() {
+    const toast = $('#copySecret');
+    if (!toast) return;
+
+    let hideTimer = 0;
+    let lastShown = 0;
+
+    const hide = () => {
+      toast.classList.remove('is-visible');
+      hideTimer = window.setTimeout(() => { toast.hidden = true; }, 500);
+    };
+
+    document.addEventListener('copy', () => {
+      const selection = window.getSelection();
+      const text = selection ? selection.toString().trim() : '';
+      if (text.length < 8) return;
+
+      let node = selection.anchorNode;
+      if (node && node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+      if (!(node instanceof Element) || !node.closest('.letter, .poem, .finale__inner, .epilogue-section')) return;
+
+      const now = Date.now();
+      if (now - lastShown < 4000) return;
+      lastShown = now;
+
+      clearTimeout(hideTimer);
+      toast.hidden = false;
+      requestAnimationFrame(() => toast.classList.add('is-visible'));
+      hideTimer = window.setTimeout(hide, 5200);
+    });
+  }
+
+  /* ------------------------------------------------------------
+     停留很久时的一行字
+     ------------------------------------------------------------ */
+  function initIdleNote() {
+    const note = $('#idleNote');
+    if (!note) return;
+
+    let idleTimer = 0;
+    let hideTimer = 0;
+    let lastReset = 0;
+    let visible = false;
+
+    const hide = () => {
+      if (!visible) return;
+      visible = false;
+      note.classList.remove('is-visible');
+      hideTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+    };
+
+    const show = () => {
+      if (document.hidden || !document.body.classList.contains('is-open')) return;
+      clearTimeout(hideTimer);
+      note.hidden = false;
+      visible = true;
+      requestAnimationFrame(() => note.classList.add('is-visible'));
+    };
+
+    const schedule = () => {
+      clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(show, 45000);
+    };
+
+    const reset = () => {
+      hide();
+      const now = performance.now();
+      if (now - lastReset < 300) return;
+      lastReset = now;
+      schedule();
+    };
+
+    ['pointermove', 'wheel', 'touchstart', 'keydown', 'scroll'].forEach(type => {
+      window.addEventListener(type, reset, { passive: true });
+    });
+
+    schedule();
+  }
+
+  /* ------------------------------------------------------------
+     星图的观测对象
+     ------------------------------------------------------------ */
+  function initSkyCoordinates() {
+    const button = $('#skyCoords');
+    const note = $('#skyNote');
+    if (!button || !note) return;
+
+    button.addEventListener('click', () => {
+      const index = $('#skyNoteIndex');
+      const title = $('#skyNoteTitle');
+      const text = $('#skyNoteText');
+      note.classList.add('is-secret');
+      if (index) index.textContent = 'OBSERVATION / 01';
+      if (title) title.textContent = '你';
+      if (text) text.textContent = '赤经 00h 00m 01s，赤纬 +31°14′。无论天球怎么转，我的坐标都一直朝着你。';
+    });
+  }
+
+  /* ------------------------------------------------------------
+     第五季
+     ------------------------------------------------------------ */
+  function initSeasonSecret() {
+    const cards = $$('.season');
+    const extra = $('#seasonExtra');
+    if (!cards.length) return;
+
+    const touched = new Set();
+
+    cards.forEach((card, index) => {
+      const reveal = () => {
+        if (touched.has(index)) return;
+        touched.add(index);
+        card.classList.add('is-touched');
+        card.setAttribute('aria-pressed', 'true');
+
+        if (extra && touched.size >= cards.length && extra.hidden) {
+          extra.hidden = false;
+          requestAnimationFrame(() => extra.classList.add('is-visible'));
+          window.setTimeout(() => {
+            extra.scrollIntoView({
+              behavior: motionReduced ? 'auto' : 'smooth',
+              block: 'nearest'
+            });
+          }, 90);
+        }
+      };
+
+      card.addEventListener('click', reveal);
+      card.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        reveal();
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------
+     WHY 下面的一句话
+     ------------------------------------------------------------ */
+  function initWhySecret() {
+    const button = $('#whySecretBtn');
+    const note = $('#whySecret');
+    if (!button || !note) return;
+
+    let closeTimer = 0;
+
+    button.addEventListener('click', () => {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      button.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     时间线的下一页
+     ------------------------------------------------------------ */
+  function initTimelineMore() {
+    const button = $('#timelineMore');
+    const item = $('#timelineAfter');
+    if (!button || !item) return;
+
+    button.addEventListener('click', () => {
+      if (!item.hidden) return;
+      item.hidden = false;
+      requestAnimationFrame(() => item.classList.add('is-visible'));
+      button.setAttribute('aria-expanded', 'true');
+      window.setTimeout(() => {
+        item.scrollIntoView({
+          behavior: motionReduced ? 'auto' : 'smooth',
+          block: 'nearest'
+        });
+      }, 90);
+    });
+  }
+
+  /* ------------------------------------------------------------
+     月亮下的一句话
+     ------------------------------------------------------------ */
+  function initMoonSecret() {
+    const trigger = $('.moment__visual--interactive');
+    const note = $('#moonSecretNote');
+    if (!trigger || !note) return;
+
+    let closeTimer = 0;
+
+    const toggle = () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      trigger.setAttribute('aria-expanded', String(willOpen));
+      trigger.setAttribute('aria-label', willOpen ? '合上月亮下的话' : '轻触月亮，读一句没有发出去的话');
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    };
+
+    trigger.addEventListener('click', toggle);
+    trigger.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggle();
+    });
+  }
+
+  /* ------------------------------------------------------------
+     对一颗星许愿
+     ------------------------------------------------------------ */
+  function initWishStar() {
+    const star = $('#wishStar');
+    const note = $('#wishNote');
+    if (!star || !note) return;
+
+    let closeTimer = 0;
+
+    star.addEventListener('click', () => {
+      const isOpen = star.getAttribute('aria-pressed') === 'true';
+      const willOpen = !isOpen;
+      star.setAttribute('aria-pressed', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     你在这里
+     ------------------------------------------------------------ */
+  function initHereSecret() {
+    const button = $('#hereSecret');
+    if (!button) return;
+
+    button.addEventListener('click', () => {
+      const isRevealed = button.getAttribute('aria-pressed') === 'true';
+      const next = !isRevealed;
+      button.setAttribute('aria-pressed', String(next));
+      button.classList.toggle('is-revealed', next);
+      button.textContent = next ? '一直是你' : '你在这里';
+      button.setAttribute('aria-label', next ? '这行字已经变成了：一直是你' : '轻触这行竖排小字');
+    });
+  }
+
+  /* ------------------------------------------------------------
+     太阳下的一行字
+     ------------------------------------------------------------ */
+  function initSunSecret() {
+    const sun = $('#sunSecret');
+    const note = $('#sunSecretNote');
+    const art = $('.hero-art');
+    if (!sun || !note) return;
+
+    let closeTimer = 0;
+
+    sun.addEventListener('click', () => {
+      const isOpen = sun.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      sun.setAttribute('aria-expanded', String(willOpen));
+      sun.setAttribute('aria-label', willOpen ? '合上太阳下的话' : '轻触太阳，读一行没有写进信里的话');
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        if (art) art.classList.add('is-sun-open');
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+      } else {
+        note.classList.remove('is-visible');
+        if (art) art.classList.remove('is-sun-open');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     键盘里的 love
+     ------------------------------------------------------------ */
+  function initLoveSecret() {
+    const toast = $('#loveSecret');
+    if (!toast) return;
+
+    let buffer = '';
+    let hideTimer = 0;
+
+    const hide = () => {
+      toast.classList.remove('is-visible');
+      hideTimer = window.setTimeout(() => { toast.hidden = true; }, 520);
+    };
+
+    const show = () => {
+      if (!document.body.classList.contains('is-open')) return;
+      clearTimeout(hideTimer);
+      toast.hidden = false;
+      requestAnimationFrame(() => toast.classList.add('is-visible'));
+      hideTimer = window.setTimeout(hide, 7200);
+    };
+
+    document.addEventListener('keydown', event => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (!event.key || event.key.length !== 1) return;
+
+      const target = event.target;
+      if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"]')) return;
+
+      buffer = `${buffer}${event.key.toLowerCase()}`.slice(-4);
+      if (buffer === 'love') {
+        buffer = '';
+        show();
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     信纸脚注
+     ------------------------------------------------------------ */
+  function initLetterFootnote() {
+    const mark = $('#letterFootnote');
+    const note = $('#letterFootnoteNote');
+    if (!mark || !note) return;
+
+    let closeTimer = 0;
+
+    mark.addEventListener('click', () => {
+      const isOpen = mark.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      mark.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+        window.setTimeout(() => {
+          note.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest'
+          });
+        }, 90);
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     控制台里的一句话
+     ------------------------------------------------------------ */
+  function initConsoleNote() {
+    try {
+      console.log(
+        '%cA LETTER FOR YOU',
+        'font: 300 26px Georgia, "Times New Roman", serif; color: #a33a2a; letter-spacing: 2px;'
+      );
+      console.log(
+        '%c如果你翻到了这里，说明你对这封信有一点好奇。\n页面上还有一颗不在图上的星。\n或者，试着在键盘上打出 love。',
+        'font: 13px "Songti SC", "STSong", serif; color: #6b6358; line-height: 1.9;'
+      );
+    } catch (err) {
+      /* console is optional */
+    }
+  }
+
+  /* ------------------------------------------------------------
+     第 00 章
+     ------------------------------------------------------------ */
+  function initZeroChapter() {
+    const dialog = $('#zeroDialog');
+    const close = $('#zeroClose');
+    const brand = $('.topbar__brand');
+    const monogram = $('.footer__monogram');
+    if (!dialog) return;
+
+    const open = () => {
+      if (!document.body.classList.contains('is-open')) return;
+      if (document.querySelector('dialog[open]')) return;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      document.body.classList.add('dialog-open');
+    };
+
+    const closeDialog = () => {
+      if (typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+    };
+
+    brand?.addEventListener('dblclick', event => {
+      event.preventDefault();
+      open();
+    });
+    brand?.addEventListener('click', event => {
+      if (event.detail > 1) event.preventDefault();
+    });
+
+    monogram?.addEventListener('dblclick', event => {
+      event.preventDefault();
+      open();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.key !== '0') return;
+      const target = event.target;
+      if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      event.preventDefault();
+      open();
+    });
+
+    close?.addEventListener('click', closeDialog);
+    dialog.addEventListener('close', () => {
+      document.body.classList.remove('dialog-open');
+    });
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) closeDialog();
+    });
+  }
+
+  /* ------------------------------------------------------------
+     深夜才出现的一行字
+     ------------------------------------------------------------ */
+  function initNightNote() {
+    const note = $('#nightNote');
+    if (!note) return;
+
+    const hour = new Date().getHours();
+    if (hour >= 23 || hour < 4) {
+      note.hidden = false;
+      requestAnimationFrame(() => note.classList.add('is-visible'));
+    }
+  }
+
+  /* ------------------------------------------------------------
+     切走标签页时的一句悄悄话
+     ------------------------------------------------------------ */
+  function initTitleSecret() {
+    const original = document.title;
+    let resetTimer = 0;
+
+    document.addEventListener('visibilitychange', () => {
+      clearTimeout(resetTimer);
+      if (document.hidden) {
+        document.title = '你还在吗？';
+      } else {
+        document.title = '欢迎回来。';
+        resetTimer = window.setTimeout(() => { document.title = original; }, 2200);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     后记 / OR THE BEGINNING
+     ------------------------------------------------------------ */
+  function initEpilogue() {
+    const button = $('#openEpilogue');
+    const section = $('#epilogue');
+    if (!button || !section) return;
+
+    button.addEventListener('click', () => {
+      if (!section.hidden) {
+        section.scrollIntoView({ behavior: motionReduced ? 'auto' : 'smooth', block: 'start' });
+        return;
+      }
+
+      section.hidden = false;
+      requestAnimationFrame(() => section.classList.add('is-visible'));
+      button.setAttribute('aria-expanded', 'true');
+      window.setTimeout(() => {
+        section.scrollIntoView({
+          behavior: motionReduced ? 'auto' : 'smooth',
+          block: 'start'
+        });
+      }, 90);
+    });
+  }
+
+  /* ------------------------------------------------------------
+     最后一句没有说出口的答案
+     ------------------------------------------------------------ */
+  function initFinaleSecret() {
+    const button = $('#finaleSecret');
+    const note = $('#finaleSecretNote');
+    if (!button || !note) return;
+
+    let closeTimer = 0;
+
+    button.addEventListener('click', () => {
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      button.setAttribute('aria-expanded', String(willOpen));
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        note.hidden = false;
+        requestAnimationFrame(() => note.classList.add('is-visible'));
+        window.setTimeout(() => {
+          note.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'nearest'
+          });
+        }, 90);
+      } else {
+        note.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { note.hidden = true; }, 500);
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
+     诗页印章
+     ------------------------------------------------------------ */
+  function initPoemSealSecret() {
+    const seal = $('#poemSeal');
+    const echo = $('#poemEcho');
+    if (!seal || !echo) return;
+
+    let closeTimer = 0;
+
+    seal.addEventListener('click', () => {
+      const isOpen = seal.getAttribute('aria-expanded') === 'true';
+      const willOpen = !isOpen;
+      seal.setAttribute('aria-expanded', String(willOpen));
+      seal.setAttribute('aria-label', willOpen ? '合上诗的另一面' : '轻触印章，翻开诗的另一面');
+      clearTimeout(closeTimer);
+
+      if (willOpen) {
+        echo.hidden = false;
+        requestAnimationFrame(() => echo.classList.add('is-visible'));
+        window.setTimeout(() => {
+          echo.scrollIntoView({
+            behavior: motionReduced ? 'auto' : 'smooth',
+            block: 'center'
+          });
+        }, 90);
+      } else {
+        echo.classList.remove('is-visible');
+        closeTimer = window.setTimeout(() => { echo.hidden = true; }, 500);
       }
     });
   }
@@ -545,6 +1432,8 @@
       this.nextShoot = 0;
       this.shooting = [];
       this.time = 0;
+      this.visited = new Set();
+      this.onAllVisited = null;
 
       this.buildDom();
       this.bind();
@@ -637,6 +1526,8 @@
       if (index < 0 || index >= this.stars.length) return;
       this.active = index;
 
+      $('#skyNote')?.classList.remove('is-secret');
+
       this.buttons.forEach((button, i) => {
         const active = i === index;
         button.classList.toggle('is-active', active);
@@ -651,6 +1542,13 @@
       if (noteIndex) noteIndex.textContent = `STAR ${String(index + 1).padStart(2, '0')} / ${String(this.stars.length).padStart(2, '0')}`;
       if (noteTitle) noteTitle.textContent = star.title;
       if (noteText) noteText.textContent = star.text;
+
+      this.visited.add(index);
+      if (this.visited.size >= this.stars.length && typeof this.onAllVisited === 'function') {
+        const reveal = this.onAllVisited;
+        this.onAllVisited = null;
+        reveal();
+      }
 
       if (motionReduced) this.draw(this.time);
     }
@@ -926,6 +1824,40 @@
 
     const map = new StarMap(canvas, host, stars);
     map.setActive(0);
+
+    const secretButton = $('#skySecret');
+    const note = $('#skyNote');
+    const secretStar = CONFIG.secretStar || {
+      title: '你',
+      text: '前面七颗星，都是我一个人的心事。第八颗不在地图上，它在你读到这里的时候，刚好亮了一下。'
+    };
+
+    if (secretButton && note) {
+      map.onAllVisited = () => {
+        secretButton.hidden = false;
+        requestAnimationFrame(() => secretButton.classList.add('is-visible'));
+      };
+
+      secretButton.addEventListener('click', () => {
+        const noteIndex = $('#skyNoteIndex');
+        const noteTitle = $('#skyNoteTitle');
+        const noteText = $('#skyNoteText');
+        const hint = $('.sky__hint');
+        const label = $('span:last-child', secretButton);
+
+        note.classList.add('is-secret');
+        if (noteIndex) noteIndex.textContent = 'STAR 08 / 08';
+        if (noteTitle) noteTitle.textContent = secretStar.title;
+        if (noteText) noteText.textContent = secretStar.text;
+        if (hint) {
+          hint.textContent = '✦ · YOU FOUND THE STAR · 你找到了一颗不在图上的星 · ✦';
+          hint.classList.add('is-found');
+        }
+        secretButton.classList.add('is-found');
+        if (label) label.textContent = '第八颗星，已找到';
+      });
+    }
+
     window.__starMap = map;
   }
 
@@ -1449,10 +2381,43 @@
     initCursor();
     initParallax();
     initAccordion();
+    initWhySecret();
+    initReasonsCountSecret();
+    initSkyCoordinates();
+    initSeasonSecret();
+    initIdleNote();
+    initCopySecret();
+    initTimeSecrets();
+    initKonami();
     initPromises();
     initTimeline();
+    initTimelineMore();
     initUnsent();
+    initStampSecret();
+    initPageSecret();
+    initSignatureSecret();
+    initPostscriptSecret();
+    initLetterDateSecret();
     initLetterSecret();
+    initLetterFootnote();
+    initMoonSecret();
+    initWishStar();
+    initHereSecret();
+    initTextSecrets();
+    initSunSecret();
+    initLoveSecret();
+    initPoemSealSecret();
+    initAnswerSecret();
+    initPoemMore();
+    initEpilogue();
+    initFinaleSecret();
+    initQuestionSecret();
+    initTitleSecret();
+    initNightNote();
+    initZeroChapter();
+    initColophon();
+    initMagnetic();
+    initConsoleNote();
     initAcrostic();
     initStarMap();
     initSound();
